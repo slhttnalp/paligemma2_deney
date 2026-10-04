@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PaliGemma 2 mimarisi</title>
+<style>
+/* Önizleme (blog'a yapıştırırken bu 2 satırı silebilirsiniz) */
+body{margin:0;padding:clamp(12px,3vw,40px);background:#eef0f6}
+@media (prefers-color-scheme:dark){body{background:#0d0f1c}}
+
+/* ===== PaliGemma 2 diyagramı: bütün kurallar .pg2 altında, blog CSS'iyle çakışmaz ===== */
+.pg2{
+  --bg:#fff;--panel:#f4f5fa;--ink:#1c2135;--muted:#5d6584;--line:#d9dcea;
+  --img-f:#dbeafe;--img-s:#3b82f6;--img-i:#1d4ed8;
+  --prj-f:#fef3c7;--prj-s:#f59e0b;--prj-i:#92400e;
+  --txt-f:#d1fae5;--txt-s:#10b981;--txt-i:#047857;
+  --lm-f:#ede9fe;--lm-s:#8b5cf6;--lm-i:#5b21b6;
+  --out-f:#ffe4e6;--out-s:#f43f5e;--out-i:#be123c;
+  container-type:inline-size;max-width:1080px;margin:0 auto;padding:clamp(16px,3vw,32px);
+  background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:18px;
+  font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+@media (prefers-color-scheme:dark){.pg2:not([data-theme=light]){
+  --bg:#14172a;--panel:#1b1f38;--ink:#e8eaf6;--muted:#a3abc9;--line:#323859;
+  --img-f:#1c3566;--img-s:#60a5fa;--img-i:#9cc4fd;
+  --prj-f:#5a3e0e;--prj-s:#fbbf24;--prj-i:#fcd34d;
+  --txt-f:#0c4a39;--txt-s:#34d399;--txt-i:#6ee7b7;
+  --lm-f:#34286a;--lm-s:#a78bfa;--lm-i:#c9bcfd;
+  --out-f:#5b1b2e;--out-s:#fb7185;--out-i:#fda4af}}
+
+.pg2 *,.pg2 *::before,.pg2 *::after{box-sizing:border-box}
+.pg2 h2{margin:0 0 .3rem;font-size:clamp(1.35rem,1rem + 1.6vw,1.9rem);line-height:1.2;letter-spacing:-.015em}
+.pg2 .sub{margin:0 0 1.75rem;max-width:62ch;color:var(--muted)}
+.pg2 h3{display:flex;align-items:center;gap:.6rem;margin:0 0 .65rem;font-size:1.02rem;line-height:1.3}
+.pg2 h3 .n{flex:none;display:grid;place-items:center;width:1.55rem;height:1.55rem;border-radius:50%;background:var(--s);color:var(--bg);font-size:.8rem;font-weight:700}
+.pg2 h4{margin:0 0 .4rem;font-size:.92rem}
+.pg2 b{color:var(--i);font-weight:650}
+
+/* ---- Akış ızgarası: dar = alt alta, geniş = iki şeritli yatay akış ---- */
+.pg2 .flow{display:grid;gap:36px;grid-template-areas:"img" "sig" "lin" "txt" "cat" "gem"}
+.pg2 .st{position:relative;padding:16px 18px 18px;border:1.5px solid var(--s);border-radius:14px;
+  background:var(--panel);background:color-mix(in srgb,var(--f) 38%,var(--bg))}
+.pg2 .img{--f:var(--img-f);--s:var(--img-s);--i:var(--img-i);grid-area:img}
+.pg2 .sig{--f:var(--img-f);--s:var(--img-s);--i:var(--img-i);grid-area:sig}
+.pg2 .lin{--f:var(--prj-f);--s:var(--prj-s);--i:var(--prj-i);grid-area:lin}
+.pg2 .txt{--f:var(--txt-f);--s:var(--txt-s);--i:var(--txt-i);grid-area:txt}
+.pg2 .gem{--f:var(--lm-f);--s:var(--lm-s);--i:var(--lm-i);grid-area:gem;border-radius:20px}
+/* Vurgu: görüntü ve metin yollarının buluştuğu nokta */
+.pg2 .cat{--f:var(--panel);--s:var(--txt-s);--i:var(--ink);grid-area:cat;border:2px solid transparent;border-radius:20px;
+  background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(135deg,var(--prj-s),var(--txt-s)) border-box;
+  box-shadow:0 0 0 6px color-mix(in srgb,var(--prj-s) 14%,transparent)}
+.pg2 .cat h3 .n{background:linear-gradient(135deg,var(--prj-s),var(--txt-s))}
+
+/* Oklar */
+.pg2 .st::after{content:"↓";position:absolute;left:50%;bottom:-32px;transform:translateX(-50%);color:var(--muted);font-size:22px;line-height:1}
+.pg2 .lin::after{content:"+"}
+.pg2 .gem::after{content:none}
+
+/* Kart içeriği */
+.pg2 .body{min-width:0}
+.pg2 .body p{margin:.1rem 0 0;font-size:.93rem}
+.pg2 .shape{display:inline-block;margin-bottom:.5rem;padding:2px 8px;border:1px solid var(--s);border-radius:6px;background:var(--bg);color:var(--ink);
+  font:600 12.5px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.pg2 svg{display:block;width:100%;height:auto;max-width:250px;margin:0 auto}
+.pg2 .pipe{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:.15rem 0 .8rem}
+.pg2 .pipe i{font-style:normal;color:var(--muted)}
+.pg2 .pipe svg{width:56px;max-width:56px;margin:0}
+.pg2 .pipe .s{font-size:.85rem;color:var(--muted)}
+.pg2 .chip{padding:3px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-size:.88rem;white-space:nowrap}
+.pg2 .chip.tx{border-color:var(--txt-s);background:var(--txt-f);color:var(--txt-i)}
+.pg2 .chip.ou{border-color:var(--out-s);background:var(--out-f);color:var(--out-i);font-weight:600}
+
+@container (min-width:560px){
+  .pg2 .st:not(.txt){display:grid;grid-template-columns:minmax(0,240px) 1fr;column-gap:22px;align-items:center}
+  .pg2 .st:not(.txt) h3{grid-column:1/-1}
+}
+@container (min-width:960px){
+  .pg2 .flow{grid-template-columns:1fr 1fr 1fr 1.12fr 1.2fr;grid-template-areas:"img sig lin cat gem" "txt txt txt cat gem";gap:36px 32px}
+  .pg2 .st:not(.txt){display:block}
+  .pg2 .st::after,.pg2 .lin::after{content:"→";left:auto;right:-29px;bottom:auto;top:50%;transform:translateY(-50%)}
+  .pg2 .gem::after{content:none}
+}
+
+/* Efsane, tablolar, not */
+.pg2 .legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:36px 0 0;padding:0;list-style:none;font-size:.88rem;color:var(--muted)}
+.pg2 .legend li{display:flex;align-items:center;gap:7px}
+.pg2 .legend i{width:14px;height:14px;border-radius:4px;background:var(--c)}
+.pg2 .facts{display:grid;gap:14px;margin-top:22px}
+@container (min-width:640px){.pg2 .facts{grid-template-columns:1fr 1fr}}
+.pg2 .facts>div{padding:12px 16px;border-radius:12px;background:var(--panel)}
+.pg2 table{width:100%;border-collapse:collapse;font-size:.86rem}
+.pg2 td{padding:5px 8px 5px 0;border-top:1px solid var(--line)}
+.pg2 td:last-child{padding-right:0;text-align:right;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.pg2 .note{margin:16px 0 0;font-size:.8rem;color:var(--muted)}
+
+/* SVG içi stiller */
+.pg2 svg text{font-family:inherit;font-size:12.5px;fill:var(--ink)}
+.pg2 svg .s{font-size:11.5px;fill:var(--muted)}
+.pg2 svg .b{font-size:13px;font-weight:650}
+.pg2 svg .m{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.pg2 svg .pi{fill:var(--prj-i)}
+.pg2 svg .ti{fill:var(--txt-i)}
+.pg2 svg .im{fill:var(--img-f);stroke:var(--img-s);stroke-width:1.5}
+.pg2 svg .imd{fill:var(--img-s);opacity:.7}
+.pg2 svg .sc{fill:var(--img-s);opacity:.35}
+.pg2 svg .pj{fill:var(--prj-f);stroke:var(--prj-s);stroke-width:1.5}
+.pg2 svg .pjd{fill:var(--prj-s);opacity:.85}
+.pg2 svg .txd{fill:var(--txt-s);opacity:.85}
+.pg2 svg .lm{fill:var(--lm-f);stroke:var(--lm-s);stroke-width:1.5}
+.pg2 svg .lmd{fill:var(--lm-s);opacity:.8}
+.pg2 svg .gl{fill:none;stroke:var(--bg);stroke-width:1}
+.pg2 svg .conn,.pg2 svg .br{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.pg2 svg .hl{stroke:var(--ink);stroke-width:2}
+.pg2 svg .nf{fill:none}
+</style>
+</head>
+<body>
+
+<figure class="pg2" aria-labelledby="pg2-t">
+  <h2 id="pg2-t">PaliGemma 2: görüntüden metne giden yol</h2>
+  <p class="sub">Görüntü ve kısa bir komut tek bir token dizisine dönüşür; Gemma 2 bu diziyi okuyup cevabı üretir.</p>
+
+  <div class="flow">
+
+    <!-- 1 · Görüntü -> patch -->
+    <section class="st img">
+      <h3><span class="n">1</span>Görüntü → patch'ler</h3>
+      <svg viewBox="0 0 200 112" role="img" aria-label="Görüntü karelere bölünür, her kare bir vektör olur">
+        <rect class="im" x="4" y="10" width="92" height="92" rx="8"/>
+        <circle class="sc" cx="70" cy="32" r="9"/>
+        <polygon class="sc" points="8,98 32,62 52,84 72,58 92,98"/>
+        <path class="gl" style="stroke:var(--img-s)" d="M27 10v92M50 10v92M73 10v92M4 33h92M4 56h92M4 79h92"/>
+        <rect class="hl nf" x="5" y="11" width="21" height="21" rx="3"/>
+        <path class="conn" d="M104 56h18m-5-4 5 4-5 4"/>
+        <rect class="imd hl" x="132" y="10" width="62" height="14" rx="3"/>
+        <rect class="imd" x="132" y="30" width="62" height="14" rx="3"/>
+        <rect class="imd" x="132" y="50" width="62" height="14" rx="3"/>
+        <text class="s" x="163" y="80" text-anchor="middle">⋮</text>
+        <rect class="imd" x="132" y="88" width="62" height="14" rx="3"/>
+      </svg>
+      <div class="body">
+        <code class="shape">N = (H/14)² · patch 14×14×3</code>
+        <p>Görüntü (224, 448 veya 896 px) <b>14×14 pikselik</b> karelere bölünür. Her kare düzleştirilip bir vektör olur; sonuç, sırayla dizilmiş N patch'tir.</p>
+      </div>
+    </section>
+
+    <!-- 2 · SigLIP -->
+    <section class="st sig">
+      <h3><span class="n">2</span>SigLIP-So400m</h3>
+      <svg viewBox="0 0 200 124" role="img" aria-label="Patch dizisi Transformer encoder'dan geçer, aynı sayıda bağlamlaşmış vektör çıkar">
+        <path class="conn" d="M24 24v10M54 24v10M84 24v10M114 24v10M144 24v10M174 24v10M24 86v10M54 86v10M84 86v10M114 86v10M144 86v10M174 86v10"/>
+        <g class="im">
+          <rect x="14" y="4" width="20" height="20" rx="4"/><rect x="44" y="4" width="20" height="20" rx="4"/><rect x="74" y="4" width="20" height="20" rx="4"/>
+          <rect x="104" y="4" width="20" height="20" rx="4"/><rect x="134" y="4" width="20" height="20" rx="4"/><rect x="164" y="4" width="20" height="20" rx="4"/>
+        </g>
+        <rect class="im" x="6" y="34" width="188" height="52" rx="10"/>
+        <text class="b" x="100" y="57" text-anchor="middle">Transformer encoder</text>
+        <text class="s" x="100" y="75" text-anchor="middle">çift yönlü self-attention</text>
+        <g class="imd">
+          <rect x="14" y="96" width="20" height="20" rx="4"/><rect x="44" y="96" width="20" height="20" rx="4"/><rect x="74" y="96" width="20" height="20" rx="4"/>
+          <rect x="104" y="96" width="20" height="20" rx="4"/><rect x="134" y="96" width="20" height="20" rx="4"/><rect x="164" y="96" width="20" height="20" rx="4"/>
+        </g>
+      </svg>
+      <div class="body">
+        <code class="shape">N × 1152</code>
+        <p><b>Vision Transformer</b> (~400M parametre): patch'ler birbirine bakarak bağlam kazanır. Tek bir özet vektör yerine <b>N patch'in hepsi</b> 1152 boyutlu vektörler olarak çıkar.</p>
+      </div>
+    </section>
+
+    <!-- 3 · Linear projection -->
+    <section class="st lin">
+      <h3><span class="n">3</span>Linear projection</h3>
+      <svg viewBox="0 0 200 118" role="img" aria-label="1152 boyutlu vektör, doğrusal katmanla d boyutuna taşınır">
+        <rect class="im" x="8" y="31" width="24" height="54" rx="4"/>
+        <polygon class="pj" points="34,31 150,10 150,102 34,85"/>
+        <rect class="pjd" x="150" y="10" width="28" height="92" rx="4"/>
+        <text class="b m" x="92" y="62" text-anchor="middle">W · b</text>
+        <text class="s" x="20" y="102" text-anchor="middle">1152</text>
+        <text class="s" x="164" y="116" text-anchor="middle">d</text>
+      </svg>
+      <div class="body">
+        <code class="shape">N × 1152 → N × d</code>
+        <p>Tek bir <b>doğrusal katman</b>, görüntü vektörlerini Gemma 2'nin gömme boyutu <b>d</b>'ye taşır (2B: 2304 · 9B: 3584 · 27B: 4608). Böylece görüntü, kelime vektörleriyle aynı boyuta gelir.</p>
+      </div>
+    </section>
+
+    <!-- 4 · Metin yolu -->
+    <section class="st txt">
+      <h3><span class="n">4</span>Metin yolu: komut → token → embedding</h3>
+      <div class="pipe">
+        <span class="chip tx">"caption en"</span><i>›</i>
+        <span class="chip">Gemma tokenizer</span><i>›</i>
+        <span class="chip tx">id₁ id₂ … id<sub>T</sub></span><i>›</i>
+        <span class="chip">embedding tablosu</span><i>›</i>
+        <svg viewBox="0 0 64 40" role="img" aria-label="T tane d boyutlu metin vektörü">
+          <rect class="txd" x="2" y="2" width="16" height="36" rx="3"/><rect class="txd" x="24" y="2" width="16" height="36" rx="3"/><rect class="txd" x="46" y="2" width="16" height="36" rx="3"/>
+        </svg>
+      </div>
+      <div class="body">
+        <code class="shape">T × d</code>
+        <p>Komut (ör. <b>caption en</b>, detect cat) Gemma'nın tokenizer'ı ile T token id'sine, ardından Gemma'nın <b>kendi embedding tablosuyla</b> d boyutlu vektörlere çevrilir. Görüntü bu yoldan geçmez.</p>
+      </div>
+    </section>
+
+    <!-- 5 · Concatenation -->
+    <section class="st cat">
+      <h3><span class="n">5</span>Birleştirme (concatenation)</h3>
+      <svg viewBox="0 0 200 118" role="img" aria-label="N görüntü token'ı ve T metin token'ı uç uca eklenerek tek dizi olur">
+        <g class="pjd">
+          <rect x="4" y="8" width="20" height="20" rx="4"/><rect x="28" y="8" width="20" height="20" rx="4"/><rect x="52" y="8" width="20" height="20" rx="4"/>
+          <rect x="76" y="8" width="20" height="20" rx="4"/><rect x="100" y="8" width="20" height="20" rx="4"/>
+        </g>
+        <g class="txd">
+          <rect x="124" y="8" width="20" height="20" rx="4"/><rect x="148" y="8" width="20" height="20" rx="4"/><rect x="172" y="8" width="20" height="20" rx="4"/>
+        </g>
+        <path class="br" d="M4 36v6h116v-6M124 36v6h68v-6M4 70v6h188v-6"/>
+        <text class="s pi" x="62" y="58" text-anchor="middle">N görüntü</text>
+        <text class="s ti" x="158" y="58" text-anchor="middle">T metin</text>
+        <text class="b m" x="98" y="97" text-anchor="middle">(N + T) × d</text>
+        <text class="s" x="98" y="113" text-anchor="middle">tek bir giriş dizisi</text>
+      </svg>
+      <div class="body">
+        <code class="shape">[ görüntü | metin ]</code>
+        <p>İki yol <b>uç uca eklenir</b>: önce N görüntü token'ı, sonra T metin token'ı. Ekstra füzyon modülü ya da cross-attention yoktur; görüntü, dil modeli için sadece bir "prefix"tir.</p>
+      </div>
+    </section>
+
+    <!-- 6 · Gemma 2 -->
+    <section class="st gem">
+      <h3><span class="n">6</span>Gemma 2 (2B · 9B · 27B)</h3>
+      <svg viewBox="0 0 200 122" role="img" aria-label="Dikkat maskesi: prefix token'ları birbirini tamamen görür, çıktı token'ları causal görür">
+        <rect class="lm" x="52" y="6" width="98" height="98" rx="3"/>
+        <path class="lmd" d="M52 6h56v56H52zM52 62h70v14H52zM52 76h84v14H52zM52 90h98v14H52z"/>
+        <path class="gl" d="M66 6v98M80 6v98M94 6v98M108 6v98M122 6v98M136 6v98M52 20h98M52 34h98M52 48h98M52 62h98M52 76h98M52 90h98"/>
+        <text class="s" x="46" y="38" text-anchor="end">prefix</text>
+        <text class="s" x="46" y="87" text-anchor="end">suffix</text>
+        <text class="s" x="101" y="119" text-anchor="middle">dikkat maskesi</text>
+      </svg>
+      <div class="body">
+        <code class="shape">(N + T) × d → sıradaki token</code>
+        <p>Decoder-only dil modeli birleşik diziyi tek akış olarak işler. Prefix (görüntü + komut) birbirini <b>çift yönlü</b> görür; çıktı token'ları ise <b>causal</b> olarak, soldan sağa üretilir.</p>
+        <div class="pipe" style="margin:.7rem 0 0">
+          <span class="s">üretilen:</span>
+          <span class="chip ou">a</span><span class="chip ou">cat</span><span class="chip ou">on</span><span class="chip ou">grass</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <ul class="legend" aria-label="Renk kodları">
+    <li><i style="--c:var(--img-s)"></i>Görüntü yolu</li>
+    <li><i style="--c:var(--prj-s)"></i>Projeksiyon çıktısı</li>
+    <li><i style="--c:var(--txt-s)"></i>Metin yolu</li>
+    <li><i style="--c:var(--lm-s)"></i>Dil modeli</li>
+    <li><i style="--c:var(--out-s)"></i>Üretilen çıktı</li>
+  </ul>
+
+  <div class="facts">
+    <div>
+      <h4>Çözünürlük → görüntü token sayısı (N)</h4>
+      <table>
+        <tr><td>224 px</td><td>16 × 16 patch</td><td>256</td></tr>
+        <tr><td>448 px</td><td>32 × 32 patch</td><td>1024</td></tr>
+        <tr><td>896 px</td><td>64 × 64 patch</td><td>4096</td></tr>
+      </table>
+    </div>
+    <div>
+      <h4>Aynı SigLIP, üç farklı Gemma 2</h4>
+      <table>
+        <tr><td>PaliGemma 2 3B</td><td>Gemma 2 2B</td><td>d = 2304</td></tr>
+        <tr><td>PaliGemma 2 10B</td><td>Gemma 2 9B</td><td>d = 3584</td></tr>
+        <tr><td>PaliGemma 2 28B</td><td>Gemma 2 27B</td><td>d = 4608</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <p class="note">N: patch sayısı · T: komutun token sayısı · d: Gemma 2 gömme boyutu. Kaynak: Steiner ve ark., PaliGemma 2 (arXiv:2412.03555).</p>
+</figure>
+
+</body>
+</html>
